@@ -18,6 +18,6 @@ public class EmailAuthVerifyRequestDto {
   private String email;
   @NotBlank
   @Pattern(regexp = "^[0-9]{6}$")
-  private Integer code;
+  private String code;
   
 }
