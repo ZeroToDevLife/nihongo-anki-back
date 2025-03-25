@@ -12,7 +12,9 @@ import com.example.nihongo.common.dto.request.auth.EmailAuthSendRequestDto;
 import com.example.nihongo.common.dto.request.auth.EmailAuthVerifyRequestDto;
 import com.example.nihongo.common.dto.response.ResponseDto;
 import com.example.nihongo.common.entity.EmailAuthEntity;
+import com.example.nihongo.common.entity.UserEntity;
 import com.example.nihongo.repository.EmailAuthRepository;
+import com.example.nihongo.repository.UserRepository;
 import com.example.nihongo.service.EmailAuthService;
 
 import jakarta.mail.internet.MimeMessage;
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class EmailAuthServiceImplement implements EmailAuthService {
 
   private final EmailAuthRepository emailAuthRepository;
+  private final UserRepository userRepository;
   private final JavaMailSender javaMailSender;
 
   @Override
@@ -36,7 +39,6 @@ public class EmailAuthServiceImplement implements EmailAuthService {
       MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
     
       helper.setTo(email);
-      helper.setFrom("Nihongo Anki");
       helper.setSubject("[Nihongo Anki] 이메일 인증 코드입니다.");
       helper.setText("""
           <div style="font-family: sans-serif; padding: 10px;">
@@ -53,8 +55,7 @@ public class EmailAuthServiceImplement implements EmailAuthService {
 
       EmailAuthEntity emailAuthEntity = new EmailAuthEntity(
       email,
-      code,
-      false
+      code
       );
         
       emailAuthRepository.save(emailAuthEntity);
@@ -71,11 +72,20 @@ public class EmailAuthServiceImplement implements EmailAuthService {
   @Override
   public ResponseEntity<ResponseDto> verifyEmail(EmailAuthVerifyRequestDto dto, String email) {
 
-    Integer code = dto.getCode();
+    Integer code = Integer.valueOf(dto.getCode());
+
 
     try {
 
       EmailAuthEntity emailAuthEntity = emailAuthRepository.findByEmail(email);
+      if (emailAuthEntity == null || !emailAuthEntity.getCode().equals(code)) return ResponseDto.validationFail();
+   
+      UserEntity userEntity = userRepository.findByEmail(email);
+      if (userEntity == null) return ResponseDto.validationFail();
+
+      userEntity.setVerified(true);
+      userRepository.save(userEntity);
+      
         
     } catch (Exception exception) {
       exception.printStackTrace();
