@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.nihongo.common.dto.request.auth.EmailAuthSendRequestDto;
+import com.example.nihongo.common.dto.request.auth.EmailAuthVerifyRequestDto;
 import com.example.nihongo.common.dto.request.auth.EmailCheckRequestDto;
 import com.example.nihongo.common.dto.request.auth.SignInRequestDto;
 import com.example.nihongo.common.dto.request.auth.SignUpRequestDto;
@@ -55,6 +56,14 @@ public class AuthController {
     @RequestBody @Valid EmailAuthSendRequestDto requestBody
   ){
     ResponseEntity<ResponseDto> response = emailAuthService.sendEmail(requestBody, requestBody.getEmail());
+    return response;
+  }
+
+  @PostMapping("/verify-email")
+  public ResponseEntity<ResponseDto> verifyEmail(
+    @RequestBody @Valid EmailAuthVerifyRequestDto requestBody
+  ){
+    ResponseEntity<ResponseDto> response = emailAuthService.verifyEmail(requestBody, requestBody.getEmail());
     return response;
   }
   
