@@ -1,0 +1,20 @@
+spring.application.name=nihongo
+
+#! REST API SERVER PORT 
+server.port=port
+
+#! DATA JPA - MySQL Connect 설정
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=my sql url
+spring.datasource.username=my sql username
+spring.datasource.password=my sql password
+
+#! JWT SECRET KEY
+jwt.secret=secret key
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=my email
+spring.mail.password=my email password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
