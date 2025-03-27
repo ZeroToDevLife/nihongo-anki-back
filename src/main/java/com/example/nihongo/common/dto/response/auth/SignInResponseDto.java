@@ -28,15 +28,18 @@ public class SignInResponseDto extends ResponseDto {
    */
   private Integer expiration;
 
+  private boolean isVerified;
+
   /**
    * description: 응답 객체를 생성합니다.
    *
    * @param accessToken 클라이언트에게 발급할 액세스 토큰
    */
-  public SignInResponseDto(String accessToken) {
+  public SignInResponseDto(String accessToken, boolean isVerified) {
     super(ResponseType.SUCCESS);
     this.accessToken = accessToken;
     this.expiration = 60 * 60 * 9; // 9시간 (초 단위)
+    this.isVerified = isVerified;
   }
 
   /**
@@ -45,8 +48,8 @@ public class SignInResponseDto extends ResponseDto {
    * @param accessToken 발급할 액세스 토큰
    * @return 200 OK 상태의 로그인 응답
    */
-  public static ResponseEntity<SignInResponseDto> success(String accessToken) {
-    SignInResponseDto body = new SignInResponseDto(accessToken);
+  public static ResponseEntity<SignInResponseDto> success(String accessToken, boolean isVerified) {
+    SignInResponseDto body = new SignInResponseDto(accessToken, isVerified);
     return ResponseEntity.status(HttpStatus.OK).body(body);
   }
 }
