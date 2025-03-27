@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.nihongo.common.dto.request.auth.EmailAuthSendRequestDto;
 import com.example.nihongo.common.dto.request.auth.EmailAuthVerifyRequestDto;
 import com.example.nihongo.common.dto.response.ResponseDto;
+import com.example.nihongo.common.dto.response.auth.EmailAuthResponseDto;
 import com.example.nihongo.common.entity.EmailAuthEntity;
 import com.example.nihongo.common.entity.UserEntity;
 import com.example.nihongo.repository.EmailAuthRepository;
@@ -70,9 +71,10 @@ public class EmailAuthServiceImplement implements EmailAuthService {
   }
 
   @Override
-  public ResponseEntity<ResponseDto> verifyEmail(EmailAuthVerifyRequestDto dto, String email) {
+  public ResponseEntity<? super EmailAuthResponseDto> verifyEmail(EmailAuthVerifyRequestDto dto, String email) {
 
     Integer code = Integer.valueOf(dto.getCode());
+    UserEntity userEntity = null;
 
 
     try {
@@ -80,7 +82,7 @@ public class EmailAuthServiceImplement implements EmailAuthService {
       EmailAuthEntity emailAuthEntity = emailAuthRepository.findByEmail(email);
       if (emailAuthEntity == null || !emailAuthEntity.getCode().equals(code)) return ResponseDto.validationFail();
    
-      UserEntity userEntity = userRepository.findByEmail(email);
+      userEntity = userRepository.findByEmail(email);
       if (userEntity == null) return ResponseDto.validationFail();
 
       userEntity.setVerified(true);
@@ -92,7 +94,7 @@ public class EmailAuthServiceImplement implements EmailAuthService {
       return ResponseDto.databaseError();
     }
 
-    return ResponseDto.success(HttpStatus.OK);
+    return EmailAuthResponseDto.success(userEntity.isVerified());
 
   }
   
