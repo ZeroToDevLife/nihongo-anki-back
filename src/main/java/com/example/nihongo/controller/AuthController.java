@@ -12,6 +12,7 @@ import com.example.nihongo.common.dto.request.auth.EmailCheckRequestDto;
 import com.example.nihongo.common.dto.request.auth.SignInRequestDto;
 import com.example.nihongo.common.dto.request.auth.SignUpRequestDto;
 import com.example.nihongo.common.dto.response.ResponseDto;
+import com.example.nihongo.common.dto.response.auth.EmailAuthResponseDto;
 import com.example.nihongo.common.dto.response.auth.SignInResponseDto;
 import com.example.nihongo.service.AuthService;
 import com.example.nihongo.service.EmailAuthService;
@@ -60,10 +61,10 @@ public class AuthController {
   }
 
   @PostMapping("/verify-email")
-  public ResponseEntity<ResponseDto> verifyEmail(
+  public ResponseEntity<? super EmailAuthResponseDto> verifyEmail(
     @RequestBody @Valid EmailAuthVerifyRequestDto requestBody
   ){
-    ResponseEntity<ResponseDto> response = emailAuthService.verifyEmail(requestBody, requestBody.getEmail());
+    ResponseEntity<? super EmailAuthResponseDto> response = emailAuthService.verifyEmail(requestBody, requestBody.getEmail());
     return response;
   }
   

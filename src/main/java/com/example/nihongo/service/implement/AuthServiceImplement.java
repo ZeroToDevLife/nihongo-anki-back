@@ -30,11 +30,12 @@ public class AuthServiceImplement implements AuthService{
   public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
 
     String accessToken = null;
+    UserEntity userEntity = null;
 
     try {
         
       String email = dto.getEmail();
-      UserEntity userEntity = userRepository.findByEmail(email);
+      userEntity = userRepository.findByEmail(email);
       if (userEntity == null) return ResponseDto.signInFail();
 
       String password = dto.getPassword();
@@ -49,7 +50,7 @@ public class AuthServiceImplement implements AuthService{
       return ResponseDto.databaseError();
     }
 
-    return SignInResponseDto.success(accessToken);
+    return SignInResponseDto.success(accessToken, userEntity.isVerified());
 
   }
 
