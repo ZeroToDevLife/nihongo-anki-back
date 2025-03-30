@@ -40,7 +40,7 @@ public class SignUpRequestDto {
    * </p>
    */
   @NotBlank
-  @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)[a-zA-Z\\d]{8,20}$")
+  @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*])[a-zA-Z\\d!@#$%^&*]{8,20}$")
   private String password;
 
   /**
