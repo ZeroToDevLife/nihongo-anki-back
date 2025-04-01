@@ -15,10 +15,15 @@ import io.jsonwebtoken.security.Keys;
 
 /**
  * class: JWT 토큰 생성 및 검증을 담당하는 제공자 클래스입니다.
+ * 
+ * description: JWT 토큰의 생성과 검증을 담당하는 클래스입니다.
+ * 
  * <p>
- * - 서명 알고리즘: HS256  
- * - 비밀 키: application.properties 또는 환경변수의 {@code jwt.secret}  
- * - 토큰 유효기간: 9시간  
+ * <ul>
+ * <li>서명 알고리즘: {@code HS256}</li>
+ * <li>비밀 키: application.properties 또는 환경변수의 {@code jwt.secret}</li>
+ * <li>토큰 유효기간: 9시간</li>
+ * </ul>
  * </p>
  */
 @Component
@@ -30,17 +35,18 @@ public class JwtProvider {
   private String secretKey;
 
   /**
-   * function: JWT 생성 메서드
+   * description: JWT 생성 메서드
+   *
    * <p>
    * <ul>
-   *   <li>{@code sub} (Subject): 사용자의 이메일</li>
-   *   <li>{@code iat} (Issued At): 토큰 생성 시간</li>
-   *   <li>{@code exp} (Expiration): 생성 시간 기준 9시간 후</li>
+   * <li>{@code sub} (Subject): 사용자의 이메일</li>
+   * <li>{@code iat} (Issued At): 토큰 생성 시간</li>
+   * <li>{@code exp} (Expiration): 생성 시간 기준 9시간 후</li>
    * </ul>
    * </p>
    *
    * @param email 토큰에 포함할 사용자 이메일
-   * @return 생성된 JWT 문자열
+   * @return 생성된 JWT 문자열, 실패 시 {@code null}
    */
   public String create(String email) {
 
@@ -68,8 +74,15 @@ public class JwtProvider {
   }
 
   /**
-   * function: JWT 검증 메서드 
-   * description: 유효한 경우 사용자 이메일(subject)을 반환합니다.
+   * description: JWT 검증 메서드
+   * 
+   * <p>
+   * <ul>
+   * <li>토큰 서명 검증</li>
+   * <li>토큰 만료 여부 확인</li>
+   * <li>토큰에서 사용자 이메일(subject) 추출</li>
+   * </ul>
+   * </p>
    * 
    * @param jwt 클라이언트로부터 받은 JWT 문자열
    * @return 유효한 토큰이면 이메일, 아니면 {@code null}

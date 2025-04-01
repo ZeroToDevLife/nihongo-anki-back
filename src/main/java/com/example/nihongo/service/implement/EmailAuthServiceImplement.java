@@ -21,6 +21,11 @@ import com.example.nihongo.service.EmailAuthService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * class: 이메일 인증 서비스 구현체
+ * 
+ * description: 이메일 인증 코드 발송 및 검증 기능을 구현합니다.
+ */
 @Service
 @RequiredArgsConstructor
 public class EmailAuthServiceImplement implements EmailAuthService {
@@ -29,6 +34,20 @@ public class EmailAuthServiceImplement implements EmailAuthService {
   private final UserRepository userRepository;
   private final JavaMailSender javaMailSender;
 
+  /**
+   * description: 이메일 인증 코드 발송
+   * 
+   * <p>
+   * <ul>
+   * <li>6자리 랜덤 인증 코드 생성</li>
+   * <li>이메일 인증 정보 저장 또는 업데이트</li>
+   * <li>인증 코드 이메일 발송</li>
+   * </ul>
+   * </p>
+   *
+   * @param dto {@link EmailAuthSendRequestDto} 이메일 인증 요청 정보
+   * @return 성공 시 {@link HttpStatus#OK} (200), 실패 시 오류 응답
+   */
   @Override
   public ResponseEntity<ResponseDto> sendEmail(EmailAuthSendRequestDto dto, String email) {
 
@@ -70,6 +89,20 @@ public class EmailAuthServiceImplement implements EmailAuthService {
 
   }
 
+  /**
+   * description: 이메일 인증 코드 검증
+   * 
+   * <p>
+   * <ul>
+   * <li>이메일로 인증 정보 조회</li>
+   * <li>인증 코드 일치 여부 확인</li>
+   * <li>인증 상태 업데이트</li>
+   * </ul>
+   * </p>
+   *
+   * @param dto {@link EmailAuthResponseDto} 이메일 인증 코드 검증 요청 정보
+   * @return 성공 시 {@link HttpStatus#OK} (200), 실패 시 {@code auth code not match} 응답
+   */
   @Override
   public ResponseEntity<? super EmailAuthResponseDto> verifyEmail(EmailAuthVerifyRequestDto dto, String email) {
 

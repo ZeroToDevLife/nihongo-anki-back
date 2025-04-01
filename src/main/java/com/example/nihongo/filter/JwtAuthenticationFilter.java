@@ -23,9 +23,8 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * class: JWT Bearer Token 인증 처리를 위한 필터입니다.
- * <p>
+ * 
  * description: 요청 헤더에서 JWT 토큰을 추출하고 유효성을 검증한 후, 인증 정보(email)를 Spring Security의 SecurityContext에 주입합니다.
- * </p>
  */
 @Component
 @RequiredArgsConstructor
@@ -35,10 +34,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final UserRepository userRepository;
 
   /**
-   * function: JWT 토큰을 추출하고 유효한 경우 인증 컨텍스트를 설정합니다.
+   * description: JWT 토큰을 추출하고 유효한 경우 인증 컨텍스트를 설정합니다.
    *
-   * @param request     HTTP 요청
-   * @param response    HTTP 응답
+   * <p>
+   * <ul>
+   * <li>Authorization 헤더에서 Bearer 토큰 추출</li>
+   * <li>토큰 유효성 검증</li>
+   * <li>사용자 존재 여부 확인</li>
+   * <li>SecurityContext 설정</li>
+   * </ul>
+   * </p>
+   *
+   * @param request HTTP 요청
+   * @param response HTTP 응답
    * @param filterChain 필터 체인
    * @throws ServletException
    * @throws IOException
@@ -77,7 +85,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   /**
-   * function: 요청의 Authorization 헤더에서 JWT 토큰을 추출합니다.
+   * description: 요청의 Authorization 헤더에서 JWT 토큰을 추출합니다.
+   *
+   * <p>
+   * <ul>
+   * <li>Authorization 헤더 존재 여부 확인</li>
+   * <li>Bearer 인증 방식 확인 ({@code Bearer <token>})</li>
+   * <li>토큰 부분만 추출 (Bearer 제외)</li>
+   * </ul>
+   * </p>
    *
    * @param request HTTP 요청
    * @return Bearer 토큰 문자열, 없으면 {@code null}
@@ -100,9 +116,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   /**
-   * function: 인증된 사용자의 이메일을 기반으로 SecurityContext를 설정합니다.
+   * description: 인증된 사용자의 이메일을 기반으로 SecurityContext를 설정합니다.
    *
-   * @param email   인증된 사용자 이메일
+   * <p>
+   * <ul>
+   * <li>인증 토큰 생성 ({@link UsernamePasswordAuthenticationToken})</li>
+   * <li>요청 상세 정보 추가</li>
+   * <li>빈 SecurityContext 생성</li>
+   * <li>SecurityContext에 인증 정보 주입</li>
+   * <li>SecurityContext 등록</li>
+   * </ul>
+   * </p>
+   *
+   * @param email 인증된 사용자 이메일
    * @param request HTTP 요청
    */
   private void setContext(String email, HttpServletRequest request) {
